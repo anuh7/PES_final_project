@@ -1,0 +1,43 @@
+/*
+ * @touch_sensor.c
+ * @brief
+ *
+ * This file initializes the capacitive touch slider and calculates the touch slider value.
+ *
+ * @date 09-Dec-2022
+ * @author Anuhya
+ */
+
+
+#include "MKL25Z4.h"
+#include "touch_sensor.h"
+
+void Touch_Init()
+{
+
+	SIM->SCGC5 |= SIM_SCGC5_TSI_MASK;				//clock gating for TSI
+
+	TSI0->GENCS = TSI_GENCS_MODE(0u) |							// 0 for capacitive sensing
+								TSI_GENCS_REFCHRG(0u) |   		//oscillator charge= 500nA
+								TSI_GENCS_DVOLT(0u) |			//0-3
+								TSI_GENCS_EXTCHRG(0u) |			//oscillator voltage value
+								TSI_GENCS_PS(0u) |				//freq divisor=1
+								TSI_GENCS_NSCN(31u) |			//no. of scans per electrode
+								TSI_GENCS_TSIEN_MASK |			//TSI enable bit
+								TSI_GENCS_STPE_MASK | 			//enables TSI in low power mode
+								TSI_GENCS_EOSF_MASK ;			//1 to clear the scan flag
+
+}
+
+
+int Touch_Scan_LH()											//reads touch sensor from low to high capacitance for left to right
+{
+	unsigned int scan=0;
+	TSI0->DATA = 	TSI_DATA_TSICH(10u);						//using channel  10 of the TSI
+	TSI0->DATA |= TSI_DATA_SWTS_MASK;							//trigger to start scanning
+	while(!(TSI0->GENCS & TSI_GENCS_EOSF_MASK)) 				//wait for 32 scans i.e. until end of scan flag is not set
+		__asm volatile("nop");
+	scan = TSI0->DATA & TSI_DATA_TSICNT_MASK;					//accessing bits in the data register
+	TSI0->GENCS |= TSI_GENCS_EOSF_MASK ;						//reset scan flag
+    return (scan - 560);										//TSI has offset value of 560
+}

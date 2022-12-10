@@ -1,0 +1,33 @@
+16:31:58 **** Incremental Build of configuration Debug for project PES_final_project ****
+make -r -j8 all 
+Building file: ../source/PES_final_project.c
+Building file: ../source/touch_sensor.c
+Invoking: MCU C Compiler
+arm-none-eabi-gcc -D__REDLIB__ -DCPU_MKL25Z128VLK4 -DCPU_MKL25Z128VLK4_cm0plus -DFSL_RTOS_BM -DSDK_OS_BAREMETAL -DSDK_DEBUGCONSOLE=1 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -DDEBUG -I"D:\CU-B\PES\final project\final_project\PES_final_project\board" -I"D:\CU-B\PES\final project\final_project\PES_final_project\source" -I"D:\CU-B\PES\final project\final_project\PES_final_project" -I"D:\CU-B\PES\final project\final_project\PES_final_project\drivers" -I"D:\CU-B\PES\final project\final_project\PES_final_project\CMSIS" -I"D:\CU-B\PES\final project\final_project\PES_final_project\utilities" -I"D:\CU-B\PES\final project\final_project\PES_final_project\startup" -O0 -fno-common -g3 -Wall -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -fmerge-constants -fmacro-prefix-map="../source/"= -mcpu=cortex-m0plus -mthumb -D__REDLIB__ -fstack-usage -specs=redlib.specs -MMD -MP -MF"source/PES_final_project.d" -MT"source/PES_final_project.o" -MT"source/PES_final_project.d" -o "source/PES_final_project.o" "../source/PES_final_project.c"
+Invoking: MCU C Compiler
+arm-none-eabi-gcc -D__REDLIB__ -DCPU_MKL25Z128VLK4 -DCPU_MKL25Z128VLK4_cm0plus -DFSL_RTOS_BM -DSDK_OS_BAREMETAL -DSDK_DEBUGCONSOLE=1 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -DDEBUG -I"D:\CU-B\PES\final project\final_project\PES_final_project\board" -I"D:\CU-B\PES\final project\final_project\PES_final_project\source" -I"D:\CU-B\PES\final project\final_project\PES_final_project" -I"D:\CU-B\PES\final project\final_project\PES_final_project\drivers" -I"D:\CU-B\PES\final project\final_project\PES_final_project\CMSIS" -I"D:\CU-B\PES\final project\final_project\PES_final_project\utilities" -I"D:\CU-B\PES\final project\final_project\PES_final_project\startup" -O0 -fno-common -g3 -Wall -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -fmerge-constants -fmacro-prefix-map="../source/"= -mcpu=cortex-m0plus -mthumb -D__REDLIB__ -fstack-usage -specs=redlib.specs -MMD -MP -MF"source/touch_sensor.d" -MT"source/touch_sensor.o" -MT"source/touch_sensor.d" -o "source/touch_sensor.o" "../source/touch_sensor.c"
+Finished building: ../source/touch_sensor.c
+ 
+Finished building: ../source/PES_final_project.c
+ 
+Building target: PES_final_project.axf
+Invoking: MCU Linker
+arm-none-eabi-gcc -nostdlib -Xlinker -Map="PES_final_project.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m0plus -mthumb -T PES_final_project_Debug.ld -o "PES_final_project.axf" ./utilities/fsl_debug_console.o  ./startup/startup_mkl25z4.o  ./source/PES_final_project.o ./source/delay.o ./source/i2c.o ./source/mma8451.o ./source/mtb.o ./source/pwm.o ./source/semihost_hardfault.o ./source/switch.o ./source/systick.o ./source/test.o ./source/touch_sensor.o  ./drivers/fsl_clock.o ./drivers/fsl_common.o ./drivers/fsl_flash.o ./drivers/fsl_gpio.o ./drivers/fsl_lpsci.o ./drivers/fsl_smc.o ./drivers/fsl_uart.o  ./board/board.o ./board/clock_config.o ./board/peripherals.o ./board/pin_mux.o  ./CMSIS/system_MKL25Z4.o   
+Memory region         Used Size  Region Size  %age Used
+   PROGRAM_FLASH:       18724 B       128 KB     14.29%
+            SRAM:        2440 B        16 KB     14.89%
+Finished building target: PES_final_project.axf
+ 
+Performing post-build steps
+arm-none-eabi-size "PES_final_project.axf"; # arm-none-eabi-objcopy -v -O binary "PES_final_project.axf" "PES_final_project.bin" ; # checksum -p MKL25Z128xxx4 -d "PES_final_project.bin";
+   text	   data	    bss	    dec	    hex	filename
+  18716	      8	   2432	  21156	   52a4	PES_final_project.axf
+ 
+16:39:50 **** Incremental Build of configuration Debug for project PES_final_project ****
+make -r -j8 all 
+make[1]: Nothing to be done for 'main-build'.
+Performing post-build steps
+arm-none-eabi-size "PES_final_project.axf"; # arm-none-eabi-objcopy -v -O binary "PES_final_project.axf" "PES_final_project.bin" ; # checksum -p MKL25Z128xxx4 -d "PES_final_project.bin";
+   text	   data	    bss	    dec	    hex	filename
+  18716	      8	   2432	  21156	   52a4	PES_final_project.axf
+ 

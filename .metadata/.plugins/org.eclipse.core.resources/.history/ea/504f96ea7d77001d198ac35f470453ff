@@ -1,0 +1,46 @@
+/*
+ * test.c
+ *
+ *  Created on: 08-Dec-2022
+ *      Author: ROTODYNE
+ */
+
+#include <math.h>
+#include "fsl_debug_console.h"
+#include "test.h"
+#include "mma8451.h"
+#include "i2c.h"
+#include "systick.h"
+
+#define MMA_ADDR 0x3A
+#define REG_WHOAMI 0x0D
+#define TEST_TIME 161
+
+void test_i2c()
+{
+	PRINTF("I2C test:");
+
+	if (i2c_read_byte(MMA_ADDR, REG_WHOAMI)==0x1A)
+	{
+		PRINTF("I2C INITIALISED SUCCESSFULLY \n\r");
+	}
+	else
+	{
+		PRINTF("I2C NOT INITIALISED \n\r");
+	}
+}
+
+
+void range_test(void)
+{
+	PRINTF("ROTATE THE BOARD TO TEST ACCELEROMETER FOR 10s \n\r");
+
+	while (time_count()<=TEST_TIME)
+	{
+		read_full_xyz_test();
+		assert(convert_to_roll()<90 && convert_to_roll()>-181);
+		assert(convert_to_pitch()<91 && convert_to_pitch()>-91);
+	}
+
+	PRINTF("RANGE TEST OF ACCELEROMETER SUCCESSFULL \n\r");
+}

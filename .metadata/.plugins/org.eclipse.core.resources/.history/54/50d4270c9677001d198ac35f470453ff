@@ -1,0 +1,43 @@
+/*
+ * i2c.h
+ *
+ *  Created on: 06-Dec-2022
+ *      Author: ROTODYNE
+ */
+
+#ifndef I2C_H_
+#define I2C_H_
+
+
+
+/**
+ * @brief This function initializes the I2C0 peripheral using pins PTE24 and PTE25 with a baud rate of 400k.
+ *
+ * @return void
+ */
+void i2c_init(void);
+
+/**
+ * @brief This function initializes the I2C0 peripheral using pins PTE24 and PTE25 with a baud rate of 400k.
+ *
+ * @return void
+ */
+void i2c_start(void);
+
+
+void i2c_read_setup(uint8_t dev, uint8_t address);
+uint8_t i2c_repeated_read(uint8_t);
+
+uint8_t i2c_read_byte(uint8_t dev, uint8_t address);
+
+/**
+ * @brief This function to write a byte to a specific device register.
+ *
+ * @param dev	device address to write byte into
+ * @param address	register address
+ * @param dara		data to write
+ * @return void
+ */
+void i2c_write_byte(uint8_t dev, uint8_t address, uint8_t data);
+
+#endif /* I2C_H_ */

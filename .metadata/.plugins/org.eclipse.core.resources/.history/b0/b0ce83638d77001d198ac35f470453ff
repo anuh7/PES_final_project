@@ -1,0 +1,129 @@
+
+/**
+ * @file    PES_final_project.c
+ * @brief   Application entry point.
+ */
+#include <stdio.h>
+#include <stdint.h>
+#include "board.h"
+#include "peripherals.h"
+#include "pin_mux.h"
+#include "clock_config.h"
+#include "MKL25Z4.h"
+#include "fsl_debug_console.h"
+#include <math.h>
+
+#include "i2c.h"
+#include "mma8451.h"
+#include "delay.h"
+#include "pwm_init.h"
+#include "touch_sensor.h"
+#include "switch.h"
+#include "test.h"
+#include "systick.h"
+
+
+#define ROLL_CONST 	2.5
+#define PITCH_CONST 10
+#define RED_CONST 	100
+#define RED_LO		70
+#define RED_HI		250
+#define GREEN_LO	300
+#define GREEN_HI	550
+#define BLUE_LO		580
+#define LED			255
+#define DELAY 		50
+
+   int switch_flag=0;
+/*
+ * @brief   Application entry point.
+ */
+int main(void) {
+
+    /* Init board hardware. */
+    BOARD_InitBootPins();
+    BOARD_InitBootClocks();
+    BOARD_InitBootPeripherals();
+#ifndef BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL
+    /* Init FSL debug console. */
+    BOARD_InitDebugConsole();
+#endif
+
+    float roll=0.0, pitch=0.0;
+    float roll_ref=0.0, pitch_ref=0.0;
+    int touch_value;
+    int next_r=0,next_g=0,next_b=0;
+    int roll_int=0, pitch_int=0;
+
+
+    Init_PWM();
+    init_systick();
+    init_switch();
+    Touch_Init();
+    i2c_init();
+    test_i2c();
+
+    if (!init_mma())
+    {												/* init mma peripheral */							/* Light red error LED */
+      while (1)																/* not able to initialize mma */
+      	;
+    }
+    PRINTF("ACCELEROMETER INITIALIZED \n\r");
+
+    range_test();
+
+
+
+    while(1)
+    {
+
+    	read_full_xyz();
+    	if(switch_flag==1)
+    	{
+    		roll_ref=convert_to_roll();
+    		pitch_ref=convert_to_pitch();
+    		PRINTF("SET REFERENCE ROLL VALUE: %d \n\r", (int)(roll_ref));
+    		PRINTF("SET REFERENCE PITCH VALUE: %d \n\r", (int)(pitch_ref));
+    		switch_flag=0;
+    	}
+    	roll=convert_to_roll();
+    	pitch=convert_to_pitch();
+    	roll_int= (int)(roll-roll_ref);
+    	pitch_int= (int)(pitch-pitch_ref);
+
+    	if (roll_int<0)
+    	{
+    		roll_int=roll_int+360;
+    	}
+
+    	if (pitch_int<-2)
+    	{
+    		pitch_int=pitch_int+180;
+    	}
+
+    	touch_value=Touch_Scan_LH();
+    	if(touch_value>=100)
+    	{
+    		PRINTF("ROLL VALUE: %d \n\r", (roll_int));
+    		PRINTF("PITCH VALUE: %d \n\r", (pitch_int));
+    		Delay(DELAY);
+    	}
+
+    	if((roll_int>-3 && roll_int<3) && (pitch_int>-1 && pitch_int<1))
+    	{
+    		next_r=255;
+    	}
+
+    	else
+    	{
+    		next_r=0;
+    	}
+    	next_g=(roll_int)*(0.7);
+    	next_b=(pitch_int)*(1.42);
+
+    	change_led(next_r,next_g,next_b);
+    	Delay(DELAY);
+
+    }
+    return 0 ;
+}

@@ -1,0 +1,17 @@
+/*
+ * @touch_sensor.c
+ * @brief
+ *
+ * This header file declares the initialization functions
+ *
+ * @date 09-Dec-2022
+ * @author Anuhya
+ */
+
+#ifndef TOUCH_SENSOR_H_
+#define TOUCH_SENSOR_H_
+
+void Touch_Init();
+int Touch_Scan_LH();
+
+#endif /* TOUCH_SENSOR_H_ */

@@ -1,0 +1,15 @@
+/*
+ * pwm_init.h
+ *
+ *  Created on: 06-Dec-2022
+ *      Author: ROTODYNE
+ */
+
+#ifndef PWM_H_
+#define PWM_H_
+
+void PWM_init();
+void TPM_init();
+void change_led(int R, int G, int B);
+
+#endif /* PWM_H_ */

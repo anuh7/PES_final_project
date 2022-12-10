@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;PES_final_project/source/pwm_init.c&apos; to &apos;pwm.c&apos;" description="Rename resource &apos;pwm_init.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="source/pwm_init.c" name="pwm.c" stamp="1670574712512" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;PES_final_project/source/pwm_init.h&apos; to &apos;pwm.h&apos;" description="Rename resource &apos;pwm_init.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="source/pwm_init.h" name="pwm.h" stamp="1670574730567" updateReferences="true"/>
+</session>

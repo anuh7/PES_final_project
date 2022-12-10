@@ -1,0 +1,57 @@
+/*
+ * mma8451.h
+ * @brief
+ *
+ * This file has the declarations to initialization for mma8451 accelerometer on board and
+ * declarations to functions to get x,y,z accelerations and functions to calculate roll and pitch angles.
+ *
+ * @date 09-Dec-2022
+ * @author Anuhya
+ * @attributions: https://github.com/alexander-g-dean/ESF/blob/master/NXP/Code/Chapter_8/I2C-Demo/src/mma8451.c
+ */
+
+#ifndef MMA8451_H_
+#define MMA8451_H_
+
+#include <stdint.h>
+
+/**
+ * @brief This function initializes the MMA8451Q inertial sensor. The sensor is configured
+ * to a sample rate of 800Hz and sample resolution of 14 bits by writing into the control register one.
+ *
+ * @return int	1
+ */
+int init_mma(void);
+
+/**
+ * @brief This function reads the x, y, and z accelerations by calling the i2c_read_byte function and then
+ * formats the data bytes into 3 acceleration vectors.
+ *
+ * @return void
+ */
+void read_full_xyz(void);
+
+/**
+ * @brief This function reads the x, y, and z accelerations by calling the i2c_read_byte function and then
+ * formats the data bytes into 3 acceleration vectors. Used to test the accelerometer functionality.
+ *
+ * @return void
+ */
+void read_full_xyz_test();
+
+/**
+ * @brief This function calculates the roll angle based on the read x, y, z acceleration values.
+ *
+ * @return float	roll angle with range (-180, 180)
+ */
+float convert_to_roll();
+
+/**
+ * @brief This function calculates the pitch angle based on the read x, y, z acceleration values.
+ *
+ * @return float 	pitch angle with range (-90, 90)
+ */
+float convert_to_pitch();
+
+
+#endif /* MMA8451_H_ */

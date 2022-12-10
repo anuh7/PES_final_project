@@ -1,0 +1,27 @@
+/*
+ * mma8451.h
+ *
+ *  Created on: 06-Dec-2022
+ *      Author: ROTODYNE
+ */
+
+#ifndef MMA8451_H_
+#define MMA8451_H_
+
+#include <stdint.h>
+
+/**
+ * @brief This function initializes the MMA8451Q inertial sensor. The sensor is configured
+ * to a sample rate of 800Hz and sample resolution of 14 bits by writing into the control register one.
+ *
+ *
+ * @return void
+ */
+int init_mma(void);
+void read_full_xyz(void);
+void read_full_xyz_test();
+float convert_to_roll();
+float convert_to_pitch();
+
+
+#endif /* MMA8451_H_ */

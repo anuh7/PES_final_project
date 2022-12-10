@@ -1,0 +1,2 @@
+../source/pwm_init.c:19:6:Init_PWM	8	static
+../source/pwm_init.c:58:6:change_led	32	static

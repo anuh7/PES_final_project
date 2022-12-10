@@ -1,0 +1,14 @@
+/*
+ * touch_sensor.h
+ *
+ *  Created on: 06-Dec-2022
+ *      Author: ROTODYNE
+ */
+
+#ifndef TOUCH_SENSOR_H_
+#define TOUCH_SENSOR_H_
+
+void Touch_Init();
+int Touch_Scan_LH();
+
+#endif /* TOUCH_SENSOR_H_ */

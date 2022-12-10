@@ -1,0 +1,11 @@
+16:39:50 **** Incremental Build of configuration Debug for project PES_final_project ****
+make -r -j8 all 
+make[1]: Nothing to be done for 'main-build'.
+Performing post-build steps
+arm-none-eabi-size "PES_final_project.axf"; # arm-none-eabi-objcopy -v -O binary "PES_final_project.axf" "PES_final_project.bin" ; # checksum -p MKL25Z128xxx4 -d "PES_final_project.bin";
+   text	   data	    bss	    dec	    hex	filename
+  18716	      8	   2432	  21156	   52a4	PES_final_project.axf
+ 
+
+16:39:51 Build Finished. 0 errors, 0 warnings. (took 327ms)
+

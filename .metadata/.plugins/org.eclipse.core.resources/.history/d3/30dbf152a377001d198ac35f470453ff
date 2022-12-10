@@ -1,0 +1,18 @@
+/*
+ * @switch.c
+ * @brief
+ *
+ * This file has the initialization for I2C0 protocol and functions to read and write a byte.
+ *
+ * @date 09-Dec-2022
+ * @author Anuhya
+ */
+
+#ifndef SWITCH_H_
+#define SWITCH_H_
+
+void init_interrupt(void);
+void switch_init();
+void PORTD_IRQHandler(void);
+
+#endif /* SWITCH_H_ */

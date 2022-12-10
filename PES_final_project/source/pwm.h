@@ -1,0 +1,45 @@
+/*
+ * @pwm.c
+ * @brief
+ *
+ * This file has the declaration for initialization for LEDs in PWM mode, and timer peripherals for the LEDs.
+ * It has also has the declaration to the function for setting LED colours.
+ *
+ * @date 09-Dec-2022
+ * @author Anuhya
+ */
+
+#ifndef PWM_H_
+#define PWM_H_
+
+/**
+ * @brief Initializes the registers for PWM
+ * In this function, the LEDs are initialized for PWM;
+ *
+ * @return void.
+ */
+void PWM_init();
+
+/**
+ * @brief Initializes the TPM for PWM
+ * In this function, the timer peripherals registers are initialized for PWM;
+ * The TPM2 Channel 0 controls the red LED
+ * The TPM2 Channel 1 controls the green LED
+ * The TPM0 Channel 1 controls the blue LED
+ *
+ * @return void.
+ */
+void TPM_init();
+
+/**
+ * @brief Function to input colours to the LEDs
+ *
+ * @param R		value for RED LED (0-255)
+ * @param G		value for GREEN LED (0-255)
+ * @param B		value for BLUE LED (0-255)
+ *
+ * @return void.
+ */
+void change_led(int R, int G, int B);
+
+#endif /* PWM_H_ */

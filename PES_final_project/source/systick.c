@@ -1,0 +1,47 @@
+/*
+ * @systick.c
+ * @brief
+ *
+ * This file has initializations for Systick, functions to return the current time, reset the start time.
+ *
+ * @date 09-Dec-2022
+ * @author Anuhya
+ */
+
+
+#include <stdio.h>
+#include "board.h"
+#include "peripherals.h"
+#include "pin_mux.h"
+#include "clock_config.h"
+#include "MKL25Z4.h"
+#include "fsl_debug_console.h"
+#include "core_cm0plus.h"
+
+#include "systick.h"
+
+#define SYSTICK_62_MS (3000000)
+
+uint32_t start_time=0;
+uint32_t total_time=0;								//counter for total time since start
+
+
+void init_systick()  {
+	SysTick_Config(SYSTICK_62_MS);					//systick interrupt for 62ms
+}
+
+void SysTick_Handler()
+{
+	total_time++;
+}
+
+uint32_t time_count()
+{
+	return (total_time-start_time);
+}
+
+
+void reset_timer()
+{
+	start_time = total_time;
+}

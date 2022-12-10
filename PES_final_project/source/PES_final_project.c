@@ -1,0 +1,139 @@
+
+/*
+ * @PES_final_project.c
+ * @brief
+ *
+ * The project implements a digital angle gauge using the built-in accelerometer. The roll and pitch angles
+ * are printed over UART onto the terminal when touch slider is pressed.
+ * This file calls the initializations to the i2c, touch slider, switch, accelerometer-mma8451, LED PWM and systick.
+ * It calls the test functions for individual components. In the while loop, the program constantly calculates the
+ * x,y,z values to calculate the roll and pitch angles. The LEDs are glowed accordingly.
+
+ *
+ * @date 08-Dec-2022
+ * @author Anuhya
+ * @attributions: https://github.com/alexander-g-dean/ESF/tree/master/NXP/Code/Chapter_8/I2C-Demo/src
+ * 				  https://github.com/alexander-g-dean/ESF/tree/master/NXP/Code/Chapter_3/Basic_Concurrency/Source
+ */
+
+#include <stdio.h>
+#include <stdint.h>
+#include "board.h"
+#include "peripherals.h"
+#include "pin_mux.h"
+#include "clock_config.h"
+#include "MKL25Z4.h"
+#include "fsl_debug_console.h"
+#include <math.h>
+
+#include "pwm.h"
+#include "i2c.h"
+#include "mma8451.h"
+#include "delay.h"
+#include "touch_sensor.h"
+#include "switch.h"
+#include "test.h"
+#include "systick.h"
+
+
+#define RED_REF 	255
+#define DELAY 		50
+#define TOUCH_OFFSET 50
+#define ROLL_SCALE 0.7
+#define PITCH_SCALE 1.42
+#define ROLL_MAX 360
+#define PITCH_MAX 180
+#define RED_OFF 0
+
+   int switch_flag=0;
+
+int main(void) {
+
+    /* Init board hardware. */
+    BOARD_InitBootPins();
+    BOARD_InitBootClocks();
+    BOARD_InitBootPeripherals();
+#ifndef BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL
+    /* Init FSL debug console. */
+    BOARD_InitDebugConsole();
+#endif
+
+    float roll=0.0, pitch=0.0;				//stores the roll and pitch values
+    float roll_ref=0.0, pitch_ref=0.0;		//store the initial reference values for roll and pitch
+    int touch_value;						//touch slider value
+    int next_r=0,next_g=0,next_b=0;			//LEDs next values
+    int roll_int=0, pitch_int=0;			//type casting
+
+
+    PWM_init();				//initialization of LEDs in PWM
+    TPM_init();				//timer peripheral initialization for PWM
+    init_systick();			//initialization of systick
+    switch_init();			//initialization of switch in interrupt
+    Touch_Init();			//initialization of touch slider
+    i2c_init();				//initialization of I2C protocol
+    test_i2c();				//testing of I2C
+
+    if (!init_mma())
+    {						//initialization of mma peripheral
+      while (1)				//unable to initialize mma
+      	;
+    }
+    PRINTF("ACCELEROMETER INITIALIZED \n\r");
+
+    range_test();			//accelerometer range test of roll and pitch angles
+
+
+
+    while(1)
+    {
+
+    	read_full_xyz();			//calculate x,y,z values
+    	if(switch_flag==1)			//if switch is pressed
+    	{
+    		roll_ref=convert_to_roll();						//roll angle reference is set
+    		pitch_ref=convert_to_pitch();					//pitch angle reference is set
+    		PRINTF("SET REFERENCE ROLL VALUE: %d \n\r", (int)(roll_ref));
+    		PRINTF("SET REFERENCE PITCH VALUE: %d \n\r", (int)(pitch_ref));
+    		switch_flag=0;									//clear the switch flag
+    	}
+    	roll=convert_to_roll();					//calculate the roll angle
+    	pitch=convert_to_pitch();				//calculate the pitch angle
+    	roll_int= (int)(roll-roll_ref);				//typecasting of roll angle with offset of set reference value
+    	pitch_int= (int)(pitch-pitch_ref);			//typecasting of pitch angle with offset of set reference value
+
+    	if (roll_int<0)
+    	{
+    		roll_int=roll_int+ROLL_MAX;				//for roll angle range of 0-360
+    	}
+
+    	if (pitch_int<-2)
+    	{
+    		pitch_int=pitch_int+PITCH_MAX;			//for pitch angle range of 0-180
+    	}
+
+    	touch_value=Touch_Scan_LH();			//scan the touch slider from left to right
+    	if(touch_value>=TOUCH_OFFSET)			//if touch slider is pressed
+    	{
+    		PRINTF("ROLL VALUE: %d \n\r", (roll_int));			//print roll angle onto the terminal
+    		PRINTF("PITCH VALUE: %d \n\r", (pitch_int));		//print roll angle onto the terminal
+    		Delay(DELAY);										//delay
+    	}
+
+    	if((roll_int>-3 && roll_int<3) && (pitch_int>-1 && pitch_int<1))
+    	{
+    		next_r=RED_REF;							//red LED to indicate starting/reference position
+    	}
+
+    	else
+    	{
+    		next_r=RED_OFF;							//else red LED is OFF
+    	}
+    	next_g=(roll_int)*(ROLL_SCALE);			//green LED indicate roll angle
+    	next_b=(pitch_int)*(PITCH_SCALE);		//blue LED indicate pitch angle
+
+    	change_led(next_r,next_g,next_b);		//pwm of LED
+    	Delay(DELAY);
+
+    }
+    return 0 ;
+}
